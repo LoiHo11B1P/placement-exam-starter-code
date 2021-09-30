@@ -4,16 +4,30 @@ console.log('JavaScript code has loaded!')
 // First, tell us your name
 let yourName = "Vinh Pham" // HINT: Replace this with your own name!
 
+// Get the Cookies Order from Local Storage
+let serializedOder = JSON.parse(localStorage.getItem('orderInfo'));
+
+console.log(serializedOder);
+
 // We'll use these variables to track the counts of each cookie type
-let gb = 0      // Ginger bread
-let cc = 0      // Chocolate Chip
-let sugar = 0   // Sugar Sprinkle
-let totalCookies = 0;
+let gb = (serializedOder == null ? 0: serializedOder[0].gb)    // Ginger bread
+let cc = (serializedOder == null ? 0: serializedOder[1].cc)      // Chocolate Chip
+let sugar = (serializedOder == null ? 0: serializedOder[2].sugar)   // Sugar Sprinkle
+let totalCookies = (serializedOder == null ? 0: serializedOder[3].totalCookies);
+
+
 // Order Summary by ID
 let gbQuantityDisplay = document.querySelector('#qty-gb');
+gbQuantityDisplay.textContent = gb;
+
 let ccQuantityDisplay = document.querySelector('#qty-cc');
+ccQuantityDisplay.textContent = cc;
+
 let sugarQuantityDisplay = document.querySelector('#qty-sugar');
+sugarQuantityDisplay.textContent = sugar;
+
 let totalDisplay =  document.querySelector('#qty-total')
+totalDisplay.textContent = totalCookies;
 
 // Code to update name display 
 document.getElementById('credit').textContent = `Created by ${yourName}`
@@ -94,4 +108,18 @@ document.getElementById('minus-sugar').addEventListener('click', function () {
 function calculateTotal () {
     totalCookies = gb+cc+sugar;
     totalDisplay.textContent = totalCookies;
+
+    saveToLocalStore (); 
+}
+
+// Storing Cookie Order in the Local Storage
+
+function saveToLocalStore () {
+    // serialize 
+    let orderInfo = [{ 'gb': gb}, {'cc': cc}, {'sugar': sugar}, {'totalCookies': totalCookies}];
+    let serializedOrderInfo = JSON.stringify(orderInfo);
+
+    // save 
+    localStorage.setItem('orderInfo', serializedOrderInfo)
+    
 }
